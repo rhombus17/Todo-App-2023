@@ -1,15 +1,24 @@
+const { db } = require("../util/admin");
+
 exports.getAllTodos = (request, response) => {
-    todos = [
-        {
-            "id": "1",
-            "title": "greeting",
-            "body": "hello world from matt"
-        },
-        {
-            "id": "2",
-            "title": "greeting2",
-            "body": "hello world 2 from matt"
-        }
-    ]
-    return response.json(todos);
-}
+    db
+        .collection('todos')
+        .orderBy('createdAt', 'desc')
+        .get()
+        .then((data) => {
+            let todos = [];
+            data.forEach((doc) => {
+                todos.push({
+                    todoID: doc.id,
+                    title: doc.data().title,
+                    body: doc.data().body,
+                    createdAt: doc.data().createdAt
+                });
+            });
+            return response.json(todos);
+        })
+        .catch((error) => {
+            console.error(error);
+            return response.status(500).json({ error: error.code });
+        });
+};
