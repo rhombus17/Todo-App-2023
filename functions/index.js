@@ -10,7 +10,8 @@ const {
 } = require('./api/todos');
 
 const {
-    loginUser
+    loginUser,
+    signupUser
 } = require('./api/users');
 
 app.post('/todo', postTodo);
@@ -20,5 +21,6 @@ app.put('/todo/:todoID', editTodo);
 app.delete('/todo/:todoID', deleteTodo);
 
 app.post('/login', loginUser);
+app.post('/signup', signupUser);
 
 exports.api = functions.https.onRequest(app);
