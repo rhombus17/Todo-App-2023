@@ -34,15 +34,18 @@ exports.signupUser = (request, response) => {
     const newUser = {
         email: request.body.email,
         username: request.body.username,
-        password: request.body.password,
-        confirmPassword: request.body.confirmPassword,
         firstName: request.body.firstName,
         lastName: request.body.lastName,
         phoneNumber: request.body.phoneNumber,
         country: request.body.country,
     };
 
-    const { valid, errors } = validateSignupData(newUser);
+    const password = {
+        password: request.body.password,
+        confirmPassword: request.body.confirmPassword
+    }
+
+    const { valid, errors } = validateSignupData(newUser, password);
 
     if (!valid) return response.status(400).json(errors);
 
@@ -58,7 +61,7 @@ exports.signupUser = (request, response) => {
                 return createUserWithEmailAndPassword(
                     auth,
                     newUser.email,
-                    newUser.password
+                    password.password
                 )
             }
         })
@@ -161,4 +164,19 @@ exports.uploadProfilePhoto = (request, response) => {
     busboy.end(request.rawBody);
 }
 
-
+exports.getUserDetail = (request, response) => {
+    let userData = {};
+    db
+        .doc(`/users/${request.user.username}`)
+        .get()
+        .then((doc) => {
+            if (doc.exists) {
+                userData.userCredentials = doc.data();
+                return response.json(userData);
+            }
+        })
+        .catch((error) => {
+            console.error(error);
+            return response.status(500).json({ error: error.code });
+        });
+}

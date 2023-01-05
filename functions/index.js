@@ -14,7 +14,8 @@ const {
 const {
     loginUser,
     signupUser,
-    uploadProfilePhoto
+    uploadProfilePhoto,
+    getUserDetail
 } = require('./api/users');
 
 app.post('/todo', postTodo);
@@ -26,5 +27,6 @@ app.delete('/todo/:todoID', deleteTodo);
 app.post('/login', loginUser);
 app.post('/signup', signupUser);
 app.post('/user/image', auth, uploadProfilePhoto);
+app.get('/user', auth, getUserDetail);
 
 exports.api = functions.https.onRequest(app);
