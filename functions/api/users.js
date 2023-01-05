@@ -90,4 +90,75 @@ exports.signupUser = (request, response) => {
         })
 }
 
+deleteImage = (imageName) => {
+    const bucket = admin.storage().bucket();
+    const path = `${imageName}`;
+    return bucket.file(path).delete()
+        .then(() => { return; })
+        .catch((error) => { return; });
+}
+
+exports.uploadProfilePhoto = (request, response) => {
+    const Busboy = require('busboy');
+    const path = require('path');
+    const os = require('os');
+    const fs = require('fs');
+
+    const busboy = Busboy({ headers: request.headers });
+    let imageFileName;
+    let imageToBeUploaded = {};
+
+    // busboy.on('file', (fieldname, file, data) => {
+    busboy.on('file', (fieldname, file, { filename, encoding, mimeType }) => {
+        if (fieldname != "image" || !mimeType || !file) {
+            return response.status(400).json({ error: 'Image data not found' });
+        }
+
+        console.log(mimeType);
+        let imageType = mimeType.split('image/')[1];
+        let acceptedFileTypes = ['png', 'jpeg'];
+
+        if (!acceptedFileTypes.includes(imageType)) {
+            return response.status(400).json({ error: 'Wrong file type submitted' });
+        }
+
+        let fileDotArgs = filename.split('.');
+        const imageExtension = fileDotArgs[fileDotArgs.length - 1];
+        imageFileName = `${request.user.username}.${imageExtension}`;
+        const filePath = path.join(os.tmpdir(), imageFileName);
+        imageToBeUploaded = {filePath, mimeType};
+        file.pipe(fs.createWriteStream(filePath));
+    });
+
+    deleteImage(imageFileName);
+
+    busboy.on('finish', () => {
+        admin
+            .storage()
+            .bucket()
+            .upload(imageToBeUploaded.filePath, {
+                resumable: false,
+                metadata: {
+                    metadata: {
+                        contentType: imageToBeUploaded.mimetype
+                    }
+                }
+            })
+            .then(() => {
+                const imageUrl = ``;
+                return db.doc(`/users/${request.user.username}`).update({
+                    imageUrl
+                });
+            })
+            .then(() => {
+                return response.json({ message: 'Image uploaded successfully' });
+            })
+            .catch((error) => {
+                console.error(error);
+                return response.status(500).json({ error: error.code });
+            })
+    });
+    busboy.end(request.rawBody);
+}
+
 
