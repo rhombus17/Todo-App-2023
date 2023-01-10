@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Navigate } from 'react-router-dom';
 
 import {
     Avatar,
@@ -13,7 +14,6 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import { styled } from '@mui/system';
 
 import AxiosUtil from '../util/AxiosUtil';
-import { Navigate } from 'react-router';
 
 const prefix = 'CLogin';
 const classes = {
@@ -97,12 +97,9 @@ class login extends Component {
                     loading: false,
                     authenticated: true
                 });
-                // this.props.history.push('/');
             })
             .catch((error) => {
                 console.log(error);
-                console.log(error.response);
-                console.log(error.response.data);
                 this.setState({
                     errors: error.response.data,
                     loading: false
@@ -185,6 +182,5 @@ class login extends Component {
         );
     }
 }
-
 
 export default login;
