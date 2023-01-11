@@ -135,7 +135,7 @@ const Login = (props) => {
                         <Grid container>
                             <Grid item>
                                 <Link href="signup" variant="body2" underline="hover">
-                                    {"Don't have an account? Sign up"}
+                                    Don't have an account? Sign up
                                 </Link>
                             </Grid>
                         </Grid>
