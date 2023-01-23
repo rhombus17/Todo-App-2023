@@ -14,10 +14,8 @@ import {
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import { styled } from '@mui/system';
 
-// import clsx from 'clsx';
-
 import AxiosUtil from '../util/AxiosUtil';
-import { authMiddleWare } from '../util/AuthUtil';
+import { getAuthToken, removeAuthToken } from '../util/AuthUtil';
 
 const prefix = 'Account';
 const classes = {
@@ -99,13 +97,16 @@ const Account = (props) => {
     const [imageError, setImageError] = useState('');
 
     const logoutHandler = () => {
-        localStorage.removeItem('AuthToken');
+        removeAuthToken();
         navigate('/login');
     }
 
     useEffect(() => {
-        authMiddleWare(navigate);
-        const authToken = localStorage.getItem("AuthToken");
+        const authToken = getAuthToken();
+        if (authToken === null)
+        {
+            navigate('/');
+        }
         AxiosUtil.defaults.headers.common = { Authorization: `${authToken}` };
         AxiosUtil
             .get('/user')
@@ -140,10 +141,12 @@ const Account = (props) => {
 
     const ProfilePictureHandler = (event) => {
         event.preventDefault();
-        // setUILoading(true);
         setImageLoading(true);
-        authMiddleWare(navigate);
-        const authToken = localStorage.getItem("AuthToken");
+        const authToken = getAuthToken();
+        if (authToken === null)
+        {
+            navigate('/');
+        }
         let formData = new FormData();
         formData.append('image', image);
         formData.append('content', content);
@@ -167,7 +170,6 @@ const Account = (props) => {
                     console.log("Access denied");
                     logoutHandler();
                 }
-                // setUILoading(false);
                 setImageLoading(false);
                 setErrors({ errorMsg: 'Error in retrieving the data' });
             });
@@ -176,8 +178,11 @@ const Account = (props) => {
     const UpdateFormValues = (event) => {
         event.preventDefault();
         setButtonLoading(true);
-        authMiddleWare(navigate);
-        const authToken = localStorage.getItem("AuthToken");
+        const authToken = getAuthToken();
+        if (authToken === null)
+        {
+            navigate('/');
+        }
         AxiosUtil.defaults.headers.common = { Authorization: `${authToken}` };
         const formRequest = {
             firstName,

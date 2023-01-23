@@ -5,7 +5,7 @@ import Account from '../components/Account';
 import Todo from '../components/Todo';
 
 import AxiosUtil from '../util/AxiosUtil';
-import { authMiddleWare, getAuthToken, removeAuthToken } from '../util/AuthUtil';
+import { getAuthToken, removeAuthToken } from '../util/AuthUtil';
 
 import {
     AppBar,
