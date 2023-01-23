@@ -148,9 +148,9 @@ exports.uploadProfilePhoto = (request, response) => {
                 }
             })
             .then(() => {
-                const imageUrl = ``;
+                const profilePicture = `https://firebasestorage.googleapis.com/v0/b/${firebaseConfig.storageBucket}/o/${imageFileName}?alt=media`;
                 return db.doc(`/users/${request.user.username}`).update({
-                    imageUrl
+                    profilePicture
                 });
             })
             .then(() => {
