@@ -14,6 +14,7 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import { styled } from '@mui/system';
 
 import AxiosUtil from '../util/AxiosUtil';
+import { setAuthToken } from '../util/AuthUtil';
 
 const prefix = 'Signup';
 const classes = {
@@ -84,7 +85,8 @@ const Signup = (props) => {
         AxiosUtil
             .post('/signup', newUserData)
             .then((response) => {
-                localStorage.setItem('AuthToken', `Bearer ${response.data.token}`);
+                // localStorage.setItem('AuthToken', `Bearer ${response.data.token}`);
+                setAuthToken(`Bearer ${response.data.token}`);
                 setLoading(false);
                 navigate('/');
             })

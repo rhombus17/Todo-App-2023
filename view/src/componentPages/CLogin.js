@@ -112,7 +112,7 @@ class login extends Component {
         return (
             <Container component="main" maxWidth="xs">
                 { authenticated && (
-                    <Navigate to="/" />
+                    <Navigate to="/c" />
                 )}
                 <StyleWrapper>
                     <div className={classes.paper}>
