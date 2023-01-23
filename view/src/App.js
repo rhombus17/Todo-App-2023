@@ -6,6 +6,7 @@ import CLogin from './componentPages/CLogin';
 import Login from './pages/Login';
 import Signup from './pages/Signup';
 import Home from './pages/Home';
+import Welcome from './pages/Welcome';
 import PageNotFound from './pages/PageNotFound';
 
 const theme = createTheme();
@@ -19,6 +20,7 @@ function App() {
             <Route exact path="/" element={<Home/>}/>
             <Route exact path="/login" element={<Login/>}/>
             <Route exact path="/signup" element={<Signup/>} />
+            <Route exact path="/welcome" element={<Welcome/>} />
 
             <Route exact path="/c/login" element={<CLogin/>}/>
 
