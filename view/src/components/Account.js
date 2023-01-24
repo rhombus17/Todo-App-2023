@@ -104,9 +104,8 @@ const Account = (props) => {
     useEffect(() => {
         const authToken = getAuthToken();
         if (authToken === null)
-        {
-            navigate('/');
-        }
+            navigate('/login');
+        
         AxiosUtil.defaults.headers.common = { Authorization: `${authToken}` };
         AxiosUtil
             .get('/user')
@@ -133,7 +132,7 @@ const Account = (props) => {
                 }
                 setErrors({ errorMsg: 'Error in retrieving the data' });
             });
-    }, []);
+    });
 
     const HandleImageChange = (event) => {
         setImage(event.target.files[0]);
@@ -144,9 +143,8 @@ const Account = (props) => {
         setImageLoading(true);
         const authToken = getAuthToken();
         if (authToken === null)
-        {
-            navigate('/');
-        }
+            navigate('/login');
+        
         let formData = new FormData();
         formData.append('image', image);
         formData.append('content', content);
@@ -180,9 +178,8 @@ const Account = (props) => {
         setButtonLoading(true);
         const authToken = getAuthToken();
         if (authToken === null)
-        {
-            navigate('/');
-        }
+            navigate('/login');
+        
         AxiosUtil.defaults.headers.common = { Authorization: `${authToken}` };
         const formRequest = {
             firstName,
