@@ -108,14 +108,13 @@ const Home = (props) => {
         {
             LoadUserData();
         }
-    }, [])
+    }, []);
 
     const LoadUserData = () => {
         const authToken = getAuthToken();
         if (authToken === null)
-        {
-            navigate('/');
-        }
+            navigate('/login');
+        
         AxiosUtil.defaults.headers.common = { Authorization: `${authToken}` };
         AxiosUtil
             .get('/user')
